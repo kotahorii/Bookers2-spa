@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
 
   def index
     users = User.all
-    render json: { users: users }
+    render json: users
   end
 
   def update
@@ -12,9 +12,9 @@ class Api::V1::UsersController < ApplicationController
     @user.image = user_params[:image] if user_params[:image] != ''
 
     if @user.save
-      render json: { user: @user }
+      render json: @user
     else
-      render json: { status: 500, message: '更新に失敗しました' }
+      render json: { message: '更新に失敗しました' }
     end
   end
 

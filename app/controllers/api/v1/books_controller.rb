@@ -3,16 +3,16 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     books = Book.all
-    render status: 200, json: books, each_serializer: BookSerializer
+    render json: books, each_serializer: BookSerializer
   end
 
   def create
     book = Book.new(book_params)
     book.user_id = current_api_v1_user.id
     if book.save
-      render json: { status: 200, data: book }
+      render json: book
     else
-      render json: { status: 500, data: '投稿に失敗しました' }
+      render json: { data: '投稿に失敗しました' }
     end
   end
 
@@ -22,17 +22,17 @@ class Api::V1::BooksController < ApplicationController
     @book.user_id = current_api_v1_user.id
 
     if @book.save
-      render json: { status: 200, data: @book }
+      render json: @book
     else
-      render json: { status: 500, data: '更新に失敗しました' }
+      render json: { data: '更新に失敗しました' }
     end
   end
 
   def destroy
     if @book.destroy
-      render json: { status: 200, data: '投稿を削除しました' }
+      render json: { data: '投稿を削除しました' }
     else
-      render josn: { status: 500, data: '削除に失敗しました' }
+      render josn: { data: '削除に失敗しました' }
     end
   end
 

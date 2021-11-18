@@ -5,17 +5,17 @@ class Api::V1::CommentsController < ApplicationController
     comment = Comment.new(comment_params)
     comment.user_id = current_api_v1_user.id
     if comment.save
-      render json: { status: 200, data: comment }
+      render json: comment
     else
-      render json: { status: 500, data: '作成に失敗しました' }
+      render json: '作成に失敗しました'
     end
   end
 
   def destroy
     if @comment.destroy
-      render json: { status: 200, data: '投稿を削除しました' }
+      render json: '投稿を削除しました'
     else
-      render json: { status: 500, data: '削除に失敗しました' }
+      render json: '削除に失敗しました'
     end
   end
 
