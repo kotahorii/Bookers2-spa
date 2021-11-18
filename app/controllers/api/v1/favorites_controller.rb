@@ -4,8 +4,7 @@ class Api::V1::FavoritesController < ApplicationController
   end
 
   def create
-    book = Book.find(favorite_params)
-    favorite = current_api_v1_user.favorites.new(book_id: book.id)
+    favorite = current_api_v1_user.favorites.new(favorite_params)
     if favorite.save
       render json: { status: 200, data: favorite }
     else
@@ -14,8 +13,7 @@ class Api::V1::FavoritesController < ApplicationController
   end
 
   def destroy
-    book = Book.find(favorite_params)
-    favorite = current_api_v1_user.favorites.find_by(book_id: book.id)
+    favorite = current_api_v1_user.favorites.find_by(favorite_params)
     if favorite.destroy
       render json: { status: 200, data: '削除しました' }
     else

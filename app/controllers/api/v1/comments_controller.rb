@@ -5,7 +5,7 @@ class Api::V1::CommentsController < ApplicationController
     comment = Comment.new(comment_params)
     comment.user_id = current_api_v1_user.id
     if comment.save
-      render json: { status: 200, data: message }
+      render json: { status: 200, data: comment }
     else
       render json: { status: 500, data: '作成に失敗しました' }
     end

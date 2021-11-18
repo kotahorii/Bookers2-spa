@@ -3,7 +3,7 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     books = Book.all
-    render json: { status: 200, data: books }
+    render status: 200, json: books, each_serializer: BookSerializer
   end
 
   def create
