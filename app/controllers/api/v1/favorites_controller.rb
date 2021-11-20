@@ -1,6 +1,6 @@
 class Api::V1::FavoritesController < ApplicationController
   def index
-    favorites = Favorite.all
+    favorites = Favorite.all.order(created_at: 'DESC')
     render json: favorites
   end
 
