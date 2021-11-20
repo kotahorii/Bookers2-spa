@@ -1,6 +1,11 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_comment, only: %i[destroy]
 
+  def index
+    comments = Comment.all
+    render json: comments
+  end
+
   def create
     comment = Comment.new(comment_params)
     comment.user_id = current_api_v1_user.id
