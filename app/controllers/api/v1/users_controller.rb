@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: %i[show update]
 
   def index
-    users = User.all
+    users = User.all.order(created_at: 'DESC')
     render json: users
   end
 

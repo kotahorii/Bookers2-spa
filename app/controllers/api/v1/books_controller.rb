@@ -2,7 +2,7 @@ class Api::V1::BooksController < ApplicationController
   before_action :set_book, except: %i[index create]
 
   def index
-    books = Book.all
+    books = Book.all.order(created_at: 'DESC')
     render json: books
   end
 

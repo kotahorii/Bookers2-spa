@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :books
   has_many :comments
   has_many :favorites
+  has_many :rates
 
   mount_uploader :image, ImageUploader
 end

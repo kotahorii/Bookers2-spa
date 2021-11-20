@@ -2,7 +2,7 @@ class Api::V1::CommentsController < ApplicationController
   before_action :set_comment, only: %i[destroy]
 
   def index
-    comments = Comment.all
+    comments = Comment.all.order(created_at: 'DESC')
     render json: comments
   end
 
