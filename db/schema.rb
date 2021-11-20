@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_080513) do
+ActiveRecord::Schema.define(version: 2021_11_20_120514) do
 
   create_table "books", force: :cascade do |t|
     t.string "title"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 2021_11_18_080513) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_favorites_on_book_id"
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "rates", force: :cascade do |t|
+    t.float "rate", default: 0.0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
+    t.integer "book_id", null: false
+    t.index ["book_id"], name: "index_rates_on_book_id"
+    t.index ["user_id"], name: "index_rates_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -70,4 +80,6 @@ ActiveRecord::Schema.define(version: 2021_11_18_080513) do
   add_foreign_key "comments", "users"
   add_foreign_key "favorites", "books"
   add_foreign_key "favorites", "users"
+  add_foreign_key "rates", "books"
+  add_foreign_key "rates", "users"
 end
