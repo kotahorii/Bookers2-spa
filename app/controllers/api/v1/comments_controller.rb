@@ -1,5 +1,5 @@
 class Api::V1::CommentsController < ApplicationController
-  before_action :set_comment, only: %i[destroy]
+  before_action :set_comment, except: %i[index create]
 
   def index
     comments = Comment.all.order(created_at: 'DESC')
