@@ -67,7 +67,6 @@ RSpec.describe 'Comment', type: :request do
       }
     end
     it 'データが作成されているか' do
-      book = create(:book)
       expect(json).to match(expected_response_object)
       expect(Comment.all.count).to eq 2
     end
