@@ -15,6 +15,7 @@ FactoryBot.define do
 end
 
 RSpec.describe 'Books', type: :request do
+  let(:json) {JSON.parse(response.body)}
   let!(:user) { create(:user) }
   let!(:book) {create(:book)}
   let(:expected_response_object) do
@@ -38,7 +39,6 @@ RSpec.describe 'Books', type: :request do
   describe '本の取得' do
       it '全ての投稿を取得' do
         get 'http://localhost:8000/api/v1/books'
-        json = JSON.parse(response.body)
         expect(json[0]).to match(expected_response_object)
       end
   end
@@ -60,7 +60,6 @@ RSpec.describe 'Books', type: :request do
         post 'http://localhost:8000/api/v1/books',
         params: { title: 'title', body: 'body' },
         headers: auth_headers
-        json = JSON.parse(response.body)
         expect(json).to match(expected_response_object)
       expect(Book.all.count).to eq 2
       expect(response.status).to eq(200)
@@ -85,7 +84,6 @@ RSpec.describe 'Books', type: :request do
        put "http://localhost:8000/api/v1/books/#{book.id}",
            params: { title: 'new', body: 'new' },
             headers: auth_headers
-      json = JSON.parse(response.body)
       expect(json).to match(expected_response_object)
       expect(response.status).to eq(200)
     end
