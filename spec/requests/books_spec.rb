@@ -16,6 +16,18 @@ end
 
 RSpec.describe 'Books', type: :request do
   let!(:user) { create(:user) }
+  let!(:book) {create(:book)}
+  let(:expected_response_object) do
+    {
+      'id' => "#{book.id}".to_i,
+      'title' => "#{book.title}",
+      'body' => "#{book.body}",
+      'user_id' => user.id,
+      'comments' => [],
+      'favorites' => [],
+      'created_at' => "#{book.created_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')}",
+    }
+  end
 
   def auth_headers
     post 'http://localhost:8000/api/v1/auth/sign_in', params: { email: user['email'], password: 'password' }
@@ -25,29 +37,56 @@ RSpec.describe 'Books', type: :request do
 
   describe '本の取得' do
       it '全ての投稿を取得' do
-        FactoryBot.create_list(:book, 10)
         get 'http://localhost:8000/api/v1/books'
         json = JSON.parse(response.body)
-        expect(json.length).to eq(10)
-    end
+        expect(json[0]).to match(expected_response_object)
+      end
   end
 
   describe '本の投稿' do
+    let(:expected_response_object) do
+     book = Book.last
+      {
+        'id' => "#{book.id}".to_i,
+        'title' => "#{book.title}",
+        'body' => "#{book.body}",
+        'user_id' => user.id,
+        'comments' => [],
+        'favorites' => [],
+        'created_at' => "#{book.created_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')}",
+      }
+    end
       it 'データが作成されているか' do
-        expect { post 'http://localhost:8000/api/v1/books',
+        post 'http://localhost:8000/api/v1/books',
         params: { title: 'title', body: 'body' },
-        headers: auth_headers}.to change(Book, :count).by(+1)
+        headers: auth_headers
+        json = JSON.parse(response.body)
+        expect(json).to match(expected_response_object)
+      expect(Book.all.count).to eq 2
+      expect(response.status).to eq(200)
       end
   end
 
   describe '本の編集' do
+    let(:expected_response_object) do
+      book = Book.last
+       {
+         'id' => "#{book.id}".to_i,
+         'title' => "#{book.title}",
+         'body' => "#{book.body}",
+         'user_id' => user.id,
+         'comments' => [],
+         'favorites' => [],
+         'created_at' => "#{book.created_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')}",
+       }
+     end
       it 'データが編集されているか' do
-      book = create(:book, title: 'old', body: 'old')
+      book = create(:book)
        put "http://localhost:8000/api/v1/books/#{book.id}",
            params: { title: 'new', body: 'new' },
             headers: auth_headers
       json = JSON.parse(response.body)
-      expect(json['title']).to eq('new')
+      expect(json).to match(expected_response_object)
       expect(response.status).to eq(200)
     end
   end
