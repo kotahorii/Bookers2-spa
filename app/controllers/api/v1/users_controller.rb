@@ -12,9 +12,9 @@ class Api::V1::UsersController < ApplicationController
     @user.image = user_params[:image] if user_params[:image] != ''
 
     if @user.save
-      render json: @user
+      render status: 200, json: @user
     else
-      render json: { message: '更新に失敗しました' }
+      render status: 401, json: { message: '更新に失敗しました' }
     end
   end
 

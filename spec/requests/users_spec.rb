@@ -3,7 +3,7 @@ require 'rails_helper'
 FactoryBot.define do
   factory :user do
     sequence(:name) { |n| "test_#{n}" }
-    sequence(:email) { |n| "test+#{n}@example.com" }
+    sequence(:email) { |n| "test+#{n}@it.com" }
     password { 'password' }
   end
 end
@@ -17,9 +17,9 @@ RSpec.describe 'Users', type: :request do
       'client' => response.header['client'], 'access-token' => response.header['access-token'] }
   end
 
-  describe '認証のテスト' do
+  describe 'ログイン済みのユーザーの取得' do
     context '未ログインの場合' do
-      example 'HTTPステータスが401であること' do
+      it 'HTTPステータスが401であること' do
         get 'http://localhost:8000/api/v1/auth/sessions'
         expect(response.status).to eq(401)
       end
@@ -28,23 +28,27 @@ RSpec.describe 'Users', type: :request do
       before do
         get 'http://localhost:8000/api/v1/auth/sessions', headers: auth_headers
       end
-      example 'HTTPステータスが200であること' do
+      it 'HTTPステータスが200であること' do
         expect(response.status).to eq(200)
       end
-      example 'レスポンスが正しいこと' do
+      it 'レスポンスが正しいこと' do
         expect(JSON.parse(response.body)['id']).to eq(user['id'])
       end
     end
   end
 
-  describe '認証のテスト' do
-    it 'ユーザーの編集' do
-      put "http://localhost:8000/api/v1/users/#{user.id}",
-      params: { name: 'new' },
-       headers: auth_headers
- json = JSON.parse(response.body)
- expect(json['name']).to eq('new')
-    end
-    end
+  describe 'ユーザーの編集テスト' do
+      before do
+        put "http://localhost:8000/api/v1/users/#{user.id}",
+        params: { name: 'new' },
+        headers: auth_headers
+      end
+      it 'レスポンスが正しいこと' do
+        json = JSON.parse(response.body)
+        expect(json['name']).to eq('new')
+      end
+      it 'HTTPステータスが200であること' do
+        expect(response.status).to eq(200)
+      end
+  end
 end
-

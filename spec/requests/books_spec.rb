@@ -35,9 +35,9 @@ RSpec.describe 'Books', type: :request do
   describe '本の投稿' do
       it 'データが作成されているか' do
         expect { post 'http://localhost:8000/api/v1/books',
-           params: { title: 'title', body: 'body' },
-            headers: auth_headers}.to change(Book, :count).by(+1)
-    end
+        params: { title: 'title', body: 'body' },
+        headers: auth_headers}.to change(Book, :count).by(+1)
+      end
   end
 
   describe '本の編集' do
